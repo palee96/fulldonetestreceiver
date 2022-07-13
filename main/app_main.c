@@ -3,8 +3,8 @@
 
 
 // MQTT broker, topic info
-#define BROKER_URL "mqtt://palee:aio_GgsA813ei55tGmJvuv1pWN3RSMBd@io.adafruit.com"
-#define IO_TOPIC "palee/feeds/jsonstuff"
+#define BROKER_URL ""
+#define IO_TOPIC ""
 static const char *TAG = "Main";
 
 
