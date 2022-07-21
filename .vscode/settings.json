@@ -11,7 +11,10 @@
     "idf.toolsPathWin": "C:\\Users\\David\\.espressif",
     "files.associations": {
         "*.inc": "c",
-        "random": "c"
+        "random": "c",
+        "bitset": "c",
+        "chrono": "c",
+        "algorithm": "c"
     },
     "idf.flashType": "UART",
     "idf.portWin": "COM4"

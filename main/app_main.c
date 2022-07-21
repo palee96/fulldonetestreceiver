@@ -1,7 +1,5 @@
 #include "main.h"
 
-
-
 // MQTT broker, topic info
 #define BROKER_URL ""
 #define IO_TOPIC ""
@@ -9,7 +7,6 @@ static const char *TAG = "Main";
 
 
 void Booting_Spiffs(){
-
 
 esp_vfs_spiffs_conf_t conf = {
       .base_path = "/spiffs",
@@ -42,33 +39,35 @@ size_t total = 0, used = 0;
     }  
 }
 
-void Saving_to_nvs(char* names_to_save){
+void Saving_to_nvs(char* names_to_save[32]){
 
    FILE* Saved_Names = fopen("/spiffs/names.txt", "w");
 if (Saved_Names == NULL) {
         ESP_LOGE(TAG, "Failed to open file for writing");
         return;
     }
-fprintf(Saved_Names, names_to_save);
-fclose(Saved_Names); 
 
+fprintf(Saved_Names,names_to_save); 
+fclose(Saved_Names); 
 }
 
-
-void Reading_from_nvs(){
-
+void Reading_from_nvs(int szamlalo_array){
 FILE* Saved_Names_v2 = fopen("/spiffs/names.txt", "r");
 if (Saved_Names_v2 == NULL) {
         ESP_LOGE(TAG, "Failed to open file for reading");
         return;
     }
-char line[64];    
+char *line[32];
 fgets(line, sizeof(line), Saved_Names_v2);
 fclose(Saved_Names_v2);
 
-ESP_LOGI(TAG, "\nRead from file: '%s'\n", line);
+for (size_t i = 0; i < szamlalo_array; i++)
+{
+    ESP_LOGI(TAG, "\nRead from file: %s\n", line[i]);
+}
 }
 
+// WiFi-Manager
 void cb_connection_ok(void *pvParameter){
 	ip_event_got_ip_t* param = (ip_event_got_ip_t*)pvParameter;
 
@@ -79,9 +78,7 @@ void cb_connection_ok(void *pvParameter){
 	ESP_LOGI(TAG, "I have a connection and my IP is %s!", str_ip);
 }
 
-
-
-void jsonmanager(char* json_data, int hosszusag)  //Handles JSON commands
+void jsonmanager(char* json_data, int json_data_length)  //Handles JSON commands
 {
 
 // cJSON parser variables //
@@ -90,12 +87,15 @@ cJSON* led_entry = NULL;
 cJSON* json_name = NULL;
 cJSON* json_writing = NULL;
 cJSON* json_reading = NULL;
+cJSON* skill_name = NULL;
+cJSON* parse_skill_name = NULL;
+
 char* json_teststring = NULL;
 int json_number = NULL;
+char* tarolohely[32];  //Store array data
+int szamlalo = 0;   // Count how many items are in the received array
 
-
-
-root = cJSON_ParseWithLength(json_data,hosszusag);
+root = cJSON_ParseWithLength(json_data,json_data_length);
 
             json_number = cJSON_GetObjectItem(root,"number")->valueint;
             led_entry = cJSON_GetObjectItem(root,"access");
@@ -103,12 +103,24 @@ root = cJSON_ParseWithLength(json_data,hosszusag);
             json_writing = cJSON_GetObjectItem(root,"spiff_write");
             json_name = cJSON_GetObjectItem(root,"name");
 
-            char *elmentett_nevek = cJSON_GetStringValue(json_name);
+            skill_name = cJSON_GetObjectItem(root,"skill_name");
+
+            
+            int skill_name_length = cJSON_GetArraySize(skill_name);
+            
+            for (size_t i = 0; i < skill_name_length; i++)
+            {
+                parse_skill_name = cJSON_GetArrayItem(skill_name,i);
+                tarolohely[i] = cJSON_GetStringValue(parse_skill_name);
+                szamlalo++;
+                //printf("Ez lett berakva az arraybe %s\n", tarolohely[i]);
+            }
+            
            
             
             if (cJSON_IsTrue(led_entry)==true)
             {
-                gpio_set_direction(json_number, GPIO_MODE_OUTPUT);  
+              gpio_set_direction(json_number, GPIO_MODE_OUTPUT);  
               gpio_set_level(json_number, 1);
               printf("The LED is turned on\n");
               vTaskDelay(400);
@@ -117,25 +129,24 @@ root = cJSON_ParseWithLength(json_data,hosszusag);
             }
             if (cJSON_IsTrue(json_writing)==true)
               {
-                Saving_to_nvs(elmentett_nevek);
+                Saving_to_nvs(tarolohely); // elmentett_nevek
               }  
               
             if (cJSON_IsTrue(json_reading)==true)
             {
-               Reading_from_nvs();
+               Reading_from_nvs(szamlalo);
             }
             else{
                 printf("Nothing to do...");
             }         
 }
 
-esp_mqtt_client_handle_t mqtt_client;
+
 int mqtt_connected = 0;
 
 static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
 {
     esp_mqtt_client_handle_t client = event->client;
-    mqtt_client = event->client;
     int msg_id;
 
 
