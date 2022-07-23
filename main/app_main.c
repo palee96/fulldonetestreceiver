@@ -93,7 +93,7 @@ cJSON* parse_skill_name = NULL;
 char* json_teststring = NULL;
 int json_number = NULL;
 char* tarolohely[32];  //Store array data
-int szamlalo = 0;   // Count how many items are in the received array
+
 
 root = cJSON_ParseWithLength(json_data,json_data_length);
 
@@ -103,20 +103,15 @@ root = cJSON_ParseWithLength(json_data,json_data_length);
             json_writing = cJSON_GetObjectItem(root,"spiff_write");
             json_name = cJSON_GetObjectItem(root,"name");
 
-            skill_name = cJSON_GetObjectItem(root,"skill_name");
+            skill_name = cJSON_GetObjectItem(root,"skill_name"); // cJSON array
 
-            
             int skill_name_length = cJSON_GetArraySize(skill_name);
             
             for (size_t i = 0; i < skill_name_length; i++)
             {
                 parse_skill_name = cJSON_GetArrayItem(skill_name,i);
                 tarolohely[i] = cJSON_GetStringValue(parse_skill_name);
-                szamlalo++;
-                //printf("Ez lett berakva az arraybe %s\n", tarolohely[i]);
             }
-            
-           
             
             if (cJSON_IsTrue(led_entry)==true)
             {
@@ -134,7 +129,7 @@ root = cJSON_ParseWithLength(json_data,json_data_length);
               
             if (cJSON_IsTrue(json_reading)==true)
             {
-               Reading_from_nvs(szamlalo);
+               Reading_from_nvs(skill_name_length);
             }
             else{
                 printf("Nothing to do...");
@@ -148,7 +143,6 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
 {
     esp_mqtt_client_handle_t client = event->client;
     int msg_id;
-
 
     switch (event->event_id) {
         case MQTT_EVENT_CONNECTED:
