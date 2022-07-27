@@ -5,6 +5,10 @@
 #define IO_TOPIC ""
 static const char *TAG = "Main";
 
+//Adafruit IO certificate 
+extern const uint8_t adafruitmqtts_pem_start[]   asm("_binary_adafruitmqtts_pem_start");
+extern const uint8_t adafruitmqtts_pem_end[]   asm("_binary_adafruitmqtts_pem_end");
+
 
 void Booting_Spiffs(){
 
@@ -183,6 +187,7 @@ static void mqtt_app_start(void)
     esp_mqtt_client_config_t mqtt_cfg = {
         .uri = BROKER_URL,
         .event_handle = mqtt_event_handler,
+        .cert_pem = (const char*)adafruitmqtts_pem_start,
     };
 
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);

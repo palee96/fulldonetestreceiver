@@ -1,4 +1,4 @@
-/* * Data converted from C:/Users/David/espidffeladatok/fulldonetestreceiver/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from C:/ESPIdfCodes/fulldonetestreceiver/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

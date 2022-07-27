@@ -10,3 +10,5 @@ set(EXTRA_COMPONENTS_DIRS components/)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(fulldonetestreceiver)
+
+target_add_binary_data(${CMAKE_PROJECT_NAME}.elf "main/adafruitmqtts.pem" TEXT)
