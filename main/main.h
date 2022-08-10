@@ -10,10 +10,6 @@
 #include "nvs_flash.h"
 #include "esp_event_loop.h"
 
-#include "sys/unistd.h"
-#include "sys/stat.h"
-#include "mbedtls/md5.h"
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
@@ -27,6 +23,17 @@
 #include "esp_log.h"
 #include "mqtt_client.h"
 #include "cJSON.h"
-#include "wifi_manager.h"
-#include "esp_spiffs.h"
+
+#include "stdio.h"
+#include "esp_mac.h"
+#include "esp_event.h"
+#include "lwip/err.h"
+#include "lwip/sys.h"
+#include <esp_system.h>
+#include <sys/param.h>
+#include "esp_eth.h"
+#include <esp_http_server.h>
+#include "tcpip_adapter.h"
+#include <unistd.h>
+#include "esp_err.h"
 #include "driver/gpio.h"
