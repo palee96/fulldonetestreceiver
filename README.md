@@ -3,4 +3,4 @@ Ugyan az a feladat ami az Arduino frameworkben van elkészítve, csak ESP-IDF-be
 
 Ez fogadja az adatokat és elvégzi a JSON-ben talált parancsokat.
 
-WiFi-Manager ami használva lett a következő: https://github.com/tonyp7/esp32-wifi-manager
+
