@@ -22,6 +22,7 @@ void Saving_names(char* names_to_save){
    else{
     err = nvs_set_str(my_handle,"names", names_to_save);
     printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+    nvs_commit(my_handle);
     nvs_close(my_handle);
    }
 }
@@ -38,6 +39,7 @@ size_t required_size;
         } else {
             nvs_get_str(my_handle, "names", NULL , &required_size);
             nvs_get_str(my_handle, "names",saved_names , &required_size);
+            nvs_commit(my_handle);
             nvs_close(my_handle);
         }
         
@@ -102,9 +104,10 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
     if (wifi_lost == true)
     {
-        ESP_LOGE(TAG,"Lost wifi connection...resending last data....\n");;
+        ESP_LOGE(TAG,"Lost wifi connection...resending last data....\n");
        esp_mqtt_client_reconnect(client);
        wifi_lost = false;
+    }  
     else{
     esp_mqtt_client_start(client);
     } 

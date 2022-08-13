@@ -13,7 +13,7 @@ cJSON* json_writing = NULL;
 cJSON* json_reading = NULL;
 cJSON* skill_name = NULL;
 cJSON* connection_err = NULL;
-//cJSON* parse_skill_name = NULL;
+
 
 char* json_teststring = NULL;
 int json_number = NULL;
@@ -29,18 +29,6 @@ root = cJSON_ParseWithLength(json_data,json_data_length);
             json_name = cJSON_GetObjectItem(root,"name");
             got_name = cJSON_GetStringValue(json_name);
            
-            /*
-            skill_name = cJSON_GetObjectItem(root,"skill_name"); // cJSON array
-
-            int skill_name_length = cJSON_GetArraySize(skill_name);
-            
-            for (size_t i = 0; i < skill_name_length; i++)
-            {
-                parse_skill_name = cJSON_GetArrayItem(skill_name,i);
-                tarolohely[i] = cJSON_GetStringValue(parse_skill_name);
-            }
-            */
-            
             if (cJSON_IsTrue(led_entry)==true)
             {
               gpio_set_direction(json_number, GPIO_MODE_OUTPUT);  
@@ -52,12 +40,12 @@ root = cJSON_ParseWithLength(json_data,json_data_length);
             }
             if (cJSON_IsTrue(json_writing)==true)
               {
-                Saving_names(got_name); // tarolohely
+                Saving_names(got_name); 
               }  
               
             if (cJSON_IsTrue(json_reading)==true)
             {
-               Reading_saved_names(); //skill_name-length
+               Reading_saved_names(); 
             }
             else{
                 printf("Nothing to do...");
