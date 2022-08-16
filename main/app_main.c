@@ -3,8 +3,8 @@
 #include "used_functions.h"
 
 char saved_names[32];
-static char __SSID[64];
-static char __PWD[32];
+char __SSID[64];
+char __PWD[32];
  
 bool wifi_lost = false;
 int maximum_reconnects =0;

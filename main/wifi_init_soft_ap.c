@@ -1,7 +1,7 @@
 #include "main.h"
 #include "used_defines.h"
 #include "used_functions.h"
-//#include "extern_veriables.h"
+
 
 // SOFT AP INITIALIZATION
 
