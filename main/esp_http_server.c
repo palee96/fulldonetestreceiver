@@ -76,7 +76,7 @@ static char __PWD[32];
 
 
  const httpd_uri_t psw_ssid = {
-    .uri       = "/connection",
+    .uri       = "/connection2",
     .method    = HTTP_POST,
     .handler   = psw_ssid_get_handler,
     .user_ctx  = "TEST",
@@ -109,11 +109,11 @@ static char __PWD[32];
     httpd_resp_sendstr_chunk(req, "<label for=\"Password\">Password</label>");
     httpd_resp_sendstr_chunk(req, "<input id=\"pwd\" type=\"password\" name=\"pwd\" maxlength=\"64\" minlength=\"4\" required>");
 
-    httpd_resp_sendstr_chunk(req, "<button>Submit</button>");
+    httpd_resp_sendstr_chunk(req, "<button tpye = \"submit\">Submit</button>");
     httpd_resp_sendstr_chunk(req, "</form>");
 
     httpd_resp_sendstr_chunk(req, "<script>");  
-    httpd_resp_sendstr_chunk(req, "document.getElementById(\"loginForm\").addEventListener(\"submit\", (e) => {e.preventDefault(); const formData = new FormData(e.target); const data = Array.from(formData.entries()).reduce((memo, pair) => ({...memo, [pair[0]]: pair[1],  }), {}); var xhr = new XMLHttpRequest(); xhr.open(\"POST\", \"http://192.168.4.1/connection\", true); xhr.setRequestHeader('Content-Type', 'application/json'); xhr.send(JSON.stringify(data)); document.getElementById(\"output\").innerHTML = JSON.stringify(data);});");
+    httpd_resp_sendstr_chunk(req, "document.getElementById(\"loginForm\").addEventListener(\"submit\", (e) => {e.preventDefault(); const formData = new FormData(e.target);  const data = Object.fromEntries(formData); console.log(JSON.stringify(data)); var xhr = new XMLHttpRequest(); xhr.open(\"POST\", \"http://192.168.4.1/connection2\", true); xhr.setRequestHeader('Content-Type', 'application/json'); xhr.send(JSON.stringify(data));});");
     httpd_resp_sendstr_chunk(req, "</script>");
 
     httpd_resp_sendstr_chunk(req, "</body></html>");
@@ -124,7 +124,7 @@ static char __PWD[32];
 
 
  const httpd_uri_t servePage = {
-    .uri       = "/wifiap",
+    .uri       = "/wifiap2",
     .method    = HTTP_GET,
     .handler   = servePage_get_handler,
     .user_ctx  = NULL,
