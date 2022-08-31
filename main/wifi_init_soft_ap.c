@@ -9,10 +9,6 @@ void wifi_init_softap(void){
 
 /*Initialization of protocols and default settings*/
  
-esp_netif_init();  //Starts underlying TCP/IP
-
-esp_event_loop_create_default();  //Start default event loop, that is a special type of loop used for system events (Wi-Fi events, for example).
-
 esp_netif_create_default_wifi_ap();  //Create default API
 
 wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT(); //Initialize wifi with default config
@@ -30,9 +26,9 @@ wifi_config_t wifi_config = {
         },
 };
 
-esp_wifi_set_mode(WIFI_MODE_AP);
-esp_wifi_set_config(WIFI_IF_AP, &wifi_config);
-esp_wifi_start();
+ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
+ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+ESP_ERROR_CHECK(esp_wifi_start());
 
 ESP_LOGI(TAG, "wifi_init_softap finished. SSID:%s password:%s",
              esp_wifi_id, esp_wifi_pass);

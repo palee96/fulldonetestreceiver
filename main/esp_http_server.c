@@ -68,7 +68,7 @@ static char __PWD[32];
     // End response
     httpd_resp_send_chunk(req, NULL, 0);
 
-    //start_wifi_with_nvs();
+    
     wifi_scan();
     return ESP_OK;
 }
